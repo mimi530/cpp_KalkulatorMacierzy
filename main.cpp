@@ -169,9 +169,6 @@ int main()
       case 2: mnozenie(); break;
       case 3:
       {
-        cout<<"dupa"<<endl;
-        cout<<"dupa"<<endl;
-        cout<<"dupa"<<endl;
         int x,y;
         cout<<"Podaj rozmiar macierzy(wiersze, kolumny): ";
         cin>>x>>y;
