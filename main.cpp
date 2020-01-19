@@ -114,72 +114,32 @@ void mnozenie()
     delete [] wynik;
   }
 }
-<<<<<<< HEAD
-=======
-void mnozenie()
+double wyznacznik(int stopien, int w, int *kolumny, int **macierz)
 {
-  int x1,x2,y1,y2;
-  cout<<"Podaj rozmiar pierwszej macierzy(wiersze, kolumny): ";
-  cin>>x1>>y1;
-  int macierz1[x1][y1];
-  for(int i=0; i<x1; i++)
+  double wynik=0;
+  if(stopien==1)
   {
-    cout<<"Podaj liczby z "<<i<<" wiersza: ";
-    for(int j=0; j<y1; j++)
-    {
-      cin>>macierz1[i][j];
-    }
-  }
-  cout<<"Podaj rozmiar drugiej macierzy(wiersze, kolumny): ";
-  cin>>x2>>y2;
-  if(y1!=x2)
-  {
-    cout<<"Nie mozna wykonac takiej operacji!";
-    system("PAUSE");
+    return macierz[w][kolumny[0]];
   }
   else
   {
-    int macierz2[x2][y2];
-    for(int i=0; i<x2; i++)
+    int *wk;
+    wk = new int [stopien-1];
+    int mnoznik = 1;
+    for(int i=0; i<stopien; i++)
     {
-      cout<<"Podaj liczby z "<<i<<" wiersza: ";
-      for(int j=0; j<y2; j++)
+      int k=0;
+      for(int j=0; j<stopien-1; j++)
       {
-        cin>>macierz2[i][j];
+        if(k==i) k++;
+        wk[j] = kolumny[k++];
       }
+      wynik += mnoznik * macierz[w][kolumny[i]]*wyznacznik(stopien-1, w+1, wk, macierz);
+      mnoznik = -mnoznik;
     }
-    int wynik[x1][y2];
-    for(int i=0; i<x1; i++)
-    {
-      for(int j=0; j<y2; j++)
-      {
-        wynik[i][j]=0;
-        for(int k=0; k<x2; k++)
-        {
-          wynik[i][j]+=macierz1[i][k]*macierz2[k][j];
-        }
-      }
-    }
-    cout<<"Wynikowa macierz to: "<<endl;
-    for(int i=0; i<x1; i++)
-    {
-      for(int j=0; j<y2; j++)
-      {
-        cout<<wynik[i][j]<<" ";
-      }
-      cout<<endl;
-    }
-    system("PAUSE");
+    delete [] wk;
+    return wynik;
   }
-}
->>>>>>> 5462783aa54f71ac57676d662383747a4b8ca768
-void wyznacznik()
-{
-  int x,y;
-  cout<<"Podaj rozmiar macierzy(wiersze, kolumny): ";
-  cin>>x>>y;
-  int **macierz1 = wczytaj_macierz(x,y);
-
 }
 void odwrotna()
 {
@@ -207,7 +167,31 @@ int main()
     {
       case 1: dodawanie(); break;
       case 2: mnozenie(); break;
-      case 3: wyznacznik(); break;
+      case 3:
+      {
+        int x,y;
+        cout<<"Podaj rozmiar macierzy(wiersze, kolumny): ";
+        cin>>x>>y;
+        if(x!=y)
+        {
+          cout<<"Nie mozna wykonac takiej operacji!";
+        }
+        else
+        {
+          int **macierz = wczytaj_macierz(x,y);
+          int stopien = x;
+          int *kolumny;
+          kolumny = new int [stopien];
+          for(int i=0; i<stopien; i++)
+            kolumny[i] = i;
+          cout<<"Wyznacznik tej macierzy to: "<<wyznacznik(stopien, 0, kolumny, macierz)<<endl;
+          system("PAUSE");
+          for (int i=0; i<stopien; i++)
+           delete [] macierz[i];
+          delete [] kolumny;
+          delete [] macierz;
+        }
+      } break;
       case 4: odwrotna(); break;
       case 5: rownanie(); break;
       case 6: return 0; break;
