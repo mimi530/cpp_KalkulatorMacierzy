@@ -2,118 +2,71 @@
 #include<stdlib.h>
 #include<Windows.h>
 using namespace std;
-void wczytaj_macierz()
+
+int **wczytaj_macierz(int x, int y)
 {
-  int x,y;
-  cin>>x>>y;
-  int macierz[x][y];
+  int **macierz=0;
+  macierz = new int *[x];
   for(int i=0; i<x; i++)
   {
+    macierz[i] = new int[y];
     cout<<"Podaj liczby z "<<i<<" wiersza: ";
     for(int j=0; j<y; j++)
     {
       cin>>macierz[i][j];
     }
   }
-
+  return macierz;
+}
+void wypisz_macierz(int **macierz, int x, int y)
+{
+  for(int i=0; i<x; i++)
+  {
+    for(int j=0; j<y; j++)
+    {
+      cout<<macierz[i][j]<<" ";
+    }
+    cout<<endl;
+  }
+  system("PAUSE");
 }
 
-class Macierz
-{
-  public:
-    int a, b;
-    int *tab;
-    Macierz(int x, int y)
-    {
-      a=x;
-      b=y;
-      int tab2[a][b];
-      tab2[0][0]=38;
-      tab=&tab2;
-    }
-    void wczytaj()
-    {
-        cout<<"jestem obiektem klasy macierz"<<endl;
-    }
-};
 void dodawanie()
 {
-  //cout<<"Podaj rozmiar pierwszej macierzy(wiersze, kolumny): ";
-  //wczytaj_macierz();
-  // int tab[2][3] = {{1,5,3},{7,8,6}};
-  // int* wsk[0] = tab;
-  Macierz m1(3,3);
-  cout<<m1.tab[0][0]<<endl;
-  system("PAUSE");
-  //cout<<"Podaj rozmiar drugiej macierzy(wiersze, kolumny): ";
+  int x1,x2,y1,y2;
+  cout<<"Podaj rozmiar pierwszej macierzy(wiersze, kolumny): "; cin>>x1>>y1;
+  int **macierz1 = wczytaj_macierz(x1,y1);
+  cout<<"Podaj rozmiar drugiej macierzy(wiersze, kolumny): "; cin>>x2>>y2;
+  if(x1!=x2 || y1!=y2)
+  {
+    cout<<"Nie mozna wykonac takiej operacji!";
+    system("PAUSE");
+  }
+  else
+  {
+    int** macierz2 = wczytaj_macierz(x2,y2);
+    int **wynik;
+    wynik = new int *[x1];
+    for(int i=0; i<x1; i++)
+      wynik[i] = new int[y1];
+    for(int i=0; i<x1; i++)
+    {
+      for(int j=0; j<y1; j++)
+      {
+        wynik[i][j]=0;
+        wynik[i][j]+=macierz1[i][j]+macierz2[i][j];
+      }
+    }
+    cout<<"Wynikowa macierz to: "<<endl;
+    wypisz_macierz(wynik, x1, y1);
+  }
 }
-// void dodawanie2()
-// {
-//   int x1,x2,y1,y2;
-//   cout<<"Podaj rozmiar pierwszej macierzy(wiersze, kolumny): ";
-//   cin>>x1>>y1;
-//   int macierz1[x1][y1];
-//   for(int i=0; i<x1; i++)
-//   {
-//     cout<<"Podaj liczby z "<<i<<" wiersza: ";
-//     for(int j=0; j<y1; j++)
-//     {
-//       cin>>macierz1[i][j];
-//     }
-//   }
-//   cout<<"Podaj rozmiar drugiej macierzy(wiersze, kolumny): ";
-//   cin>>x2>>y2;
-//   if(x1!=x2 || y1!=y2)
-//   {
-//     cout<<"Nie mozna wykonac takiej operacji!";
-//     system("PAUSE");
-//   }
-//   else
-//   {
-//     int macierz2[x2][y2];
-//     for(int i=0; i<x2; i++)
-//     {
-//       cout<<"Podaj liczby z "<<i<<" wiersza: ";
-//       for(int j=0; j<y2; j++)
-//       {
-//         cin>>macierz2[i][j];
-//       }
-//     }
-//     int wynik[x1][y1];
-//     for(int i=0; i<x1; i++)
-//     {
-//       for(int j=0; j<y1; j++)
-//       {
-//         wynik[i][j]=0;
-//         wynik[i][j]+=macierz1[i][j]+macierz2[i][j];
-//       }
-//     }
-//     cout<<"Wynikowa macierz to: "<<endl;
-//     for(int i=0; i<x1; i++)
-//     {
-//       for(int j=0; j<y1; j++)
-//       {
-//         cout<<wynik[i][j]<<" ";
-//       }
-//       cout<<endl;
-//     }
-//     system("PAUSE");
-//   }
-// }
 void mnozenie()
 {
   int x1,x2,y1,y2;
   cout<<"Podaj rozmiar pierwszej macierzy(wiersze, kolumny): ";
   cin>>x1>>y1;
-  int macierz1[x1][y1];
-  for(int i=0; i<x1; i++)
-  {
-    cout<<"Podaj liczby z "<<i<<" wiersza: ";
-    for(int j=0; j<y1; j++)
-    {
-      cin>>macierz1[i][j];
-    }
-  }
+  int **macierz1 = wczytaj_macierz(x1,y1);
   cout<<"Podaj rozmiar drugiej macierzy(wiersze, kolumny): ";
   cin>>x2>>y2;
   if(y1!=x2)
@@ -123,16 +76,11 @@ void mnozenie()
   }
   else
   {
-    int macierz2[x2][y2];
-    for(int i=0; i<x2; i++)
-    {
-      cout<<"Podaj liczby z "<<i<<" wiersza: ";
-      for(int j=0; j<y2; j++)
-      {
-        cin>>macierz2[i][j];
-      }
-    }
-    int wynik[x1][y2];
+    int **macierz2 = wczytaj_macierz(x2,y2);
+    int **wynik;
+    wynik = new int *[x1];
+    for(int i=0; i<x1; i++)
+      wynik[i] = new int[y2];
     for(int i=0; i<x1; i++)
     {
       for(int j=0; j<y2; j++)
@@ -145,15 +93,7 @@ void mnozenie()
       }
     }
     cout<<"Wynikowa macierz to: "<<endl;
-    for(int i=0; i<x1; i++)
-    {
-      for(int j=0; j<y2; j++)
-      {
-        cout<<wynik[i][j]<<" ";
-      }
-      cout<<endl;
-    }
-    system("PAUSE");
+    wypisz_macierz(wynik, x1, y2);
   }
 }
 void wyznacznik()
@@ -207,3 +147,8 @@ int main()
     }
   }
 }
+// for (  h = 0; h < height; h++)
+//           {
+//             delete [] my2DArray[h];
+//           }
+//           delete [] my2DArray;
