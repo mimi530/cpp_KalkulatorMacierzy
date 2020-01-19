@@ -35,30 +35,39 @@ void dodawanie()
 {
   int x1,x2,y1,y2;
   cout<<"Podaj rozmiar pierwszej macierzy(wiersze, kolumny): "; cin>>x1>>y1;
-  int **macierz1 = wczytaj_macierz(x1,y1);
+  int **macierz1 = wczytaj_macierz(x1,y1); //deklaracja pierwszej macierzy
   cout<<"Podaj rozmiar drugiej macierzy(wiersze, kolumny): "; cin>>x2>>y2;
-  if(x1!=x2 || y1!=y2)
+  if(x1!=x2 || y1!=y2) //walidacja dodawania
   {
     cout<<"Nie mozna wykonac takiej operacji!";
     system("PAUSE");
   }
   else
   {
-    int** macierz2 = wczytaj_macierz(x2,y2);
-    int **wynik;
-    wynik = new int *[x1];
-    for(int i=0; i<x1; i++)
-      wynik[i] = new int[y1];
+    int** macierz2 = wczytaj_macierz(x2,y2); //deklaracja drugiej macierzy
+    int **wynik;              //
+    wynik = new int *[x1];    //
+    for(int i=0; i<x1; i++)   // deklaracja macierzy wynikowej
+      wynik[i] = new int[y1]; //
     for(int i=0; i<x1; i++)
     {
       for(int j=0; j<y1; j++)
       {
         wynik[i][j]=0;
-        wynik[i][j]+=macierz1[i][j]+macierz2[i][j];
+        wynik[i][j]+=macierz1[i][j]+macierz2[i][j]; //dodawanie odpowiadajacych sobie elementow
       }
     }
     cout<<"Wynikowa macierz to: "<<endl;
-    wypisz_macierz(wynik, x1, y1);
+    wypisz_macierz(wynik, x1, y1); //wypisywanie macierzy wynikowej
+    for (int i=0; i<x1; i++) //usuwanie zaalokowanych zasobow
+    {
+     delete [] macierz1[i];
+     delete [] macierz2[i];
+     delete [] wynik[i];
+    }
+    delete [] macierz1;
+    delete [] macierz2;
+    delete [] wynik;
   }
 }
 void mnozenie()
@@ -69,7 +78,7 @@ void mnozenie()
   int **macierz1 = wczytaj_macierz(x1,y1);
   cout<<"Podaj rozmiar drugiej macierzy(wiersze, kolumny): ";
   cin>>x2>>y2;
-  if(y1!=x2)
+  if(y1!=x2) //walidacja mnozenia
   {
     cout<<"Nie mozna wykonac takiej operacji!";
     system("PAUSE");
@@ -94,6 +103,15 @@ void mnozenie()
     }
     cout<<"Wynikowa macierz to: "<<endl;
     wypisz_macierz(wynik, x1, y2);
+    for (int i=0; i<x1; i++)
+    {
+     delete [] macierz1[i];
+     delete [] macierz2[i];
+     delete [] wynik[i];
+    }
+    delete [] macierz1;
+    delete [] macierz2;
+    delete [] wynik;
   }
 }
 void wyznacznik()
@@ -101,15 +119,7 @@ void wyznacznik()
   int x,y;
   cout<<"Podaj rozmiar macierzy(wiersze, kolumny): ";
   cin>>x>>y;
-  int macierz1[x][y];
-  for(int i=0; i<x; i++)
-  {
-    cout<<"Podaj liczby z "<<i<<" wiersza: ";
-    for(int j=0; j<y; j++)
-    {
-      cin>>macierz1[i][j];
-    }
-  }
+  int **macierz1 = wczytaj_macierz(x,y);
 
 }
 void odwrotna()
@@ -133,8 +143,7 @@ int main()
     cout<<"5. Rozwiaz rownanie."<<endl;
     cout<<"6. Wyjdz."<<endl;
     cout<<"Wybierz opcje: ";
-    int opcja;
-    cin>>opcja;
+    int opcja; cin>>opcja;
     switch(opcja)
     {
       case 1: dodawanie(); break;
@@ -147,8 +156,3 @@ int main()
     }
   }
 }
-// for (  h = 0; h < height; h++)
-//           {
-//             delete [] my2DArray[h];
-//           }
-//           delete [] my2DArray;
